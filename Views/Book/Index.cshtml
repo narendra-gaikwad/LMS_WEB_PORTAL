@@ -1,0 +1,95 @@
+﻿@model IEnumerable<LMS_WEB_PORTAL.Models.Book>
+
+@{
+    ViewData["Title"] = "Books List";
+}
+
+<h2>Books List</h2>
+
+<!-- Add New Book Button -->
+<a asp-action="Create" class="btn btn-primary mb-3">Add New Book</a>
+
+<!-- Search Box -->
+<input type="text" id="searchBox" class="form-control mb-3" placeholder="Search by Title, Author, or ISBN">
+
+<!-- Total Issued Books -->
+<div class="alert alert-info">
+    <strong>Total Issued Books:</strong> <span id="issuedBooksCount">@ViewBag.IssuedBooksCount</span>
+</div>
+
+<!-- Books Table -->
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>ISBN</th>
+            <th>Total Copies</th>
+            <th>Issued Copies</th>
+            <th>Available Copies</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="bookTableBody">
+        @foreach (var book in Model)
+        {
+            <tr>
+                <td>@book.Title</td>
+                <td>@book.Author</td>
+                <td>@book.ISBN</td>
+                <td>@book.TotalCopies</td>
+                <td>@book.IssuedCopies</td>
+                <td>@book.AvailableCopies</td> <!-- Show Available Copies -->
+                <td>
+                    <a asp-action="Edit" asp-route-id="@book.Id" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@book.Id" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<!-- jQuery for Live Search -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#searchBox").on("input", function () {
+            var searchTerm = $(this).val();
+
+            $.ajax({
+                url: "/Book/SearchBooks",
+                type: "GET",
+                data: { searchTerm: searchTerm },
+                success: function (data) {
+                    var tableBody = $("#bookTableBody");
+                    tableBody.empty(); // Clear existing rows
+
+                    var issuedCount = 0;
+
+                    $.each(data, function (index, book) {
+                        var status = book.isIssued ? "Issued" : "Available";
+                        if (book.isIssued) {
+                            issuedCount++; // Count issued books
+                        }
+
+                        var row = `<tr>
+                                <td>${book.title}</td>
+                                <td>${book.author}</td>
+                                <td>${book.isbn}</td>
+                                <td>${status}</td>
+                                <td>
+                                    <a href="/Book/Edit/${book.id}" class="btn btn-sm btn-warning">Edit</a>
+                                    <a href="/Book/Delete/${book.id}" class="btn btn-sm btn-danger">Delete</a>
+                                </td>
+                            </tr>`;
+                        tableBody.append(row);
+                    });
+
+                    // Update issued books count dynamically
+                    $("#issuedBooksCount").text(issuedCount);
+                }
+            });
+        });
+    });
+</script>
