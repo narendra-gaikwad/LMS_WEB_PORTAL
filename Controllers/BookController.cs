@@ -14,29 +14,19 @@ namespace LMS_WEB_PORTAL.Controllers
             _bookService = bookService;
         }
 
-        //public async Task<IActionResult> Index()
-        //{
-        //    var books = await _bookService.GetBooks();
-
-        //    // Count the number of issued books
-        //    int issuedBooksCount = books.Count(b => b.IsIssued);
-
-        //    ViewBag.IssuedBooksCount = issuedBooksCount; // Pass to the view
-
-        //    return View(books);
-        //}
+   
 
         public async Task<IActionResult> Index()
         {
-            var books = await _bookService.GetBooks(); // Fetch all books
+            var books = await _bookService.GetBooks(); 
 
-            // Debugging: Check total and issued copies
+     
             foreach (var book in books)
             {
                 Console.WriteLine($"Book: {book.Title}, Total: {book.TotalCopies}, Issued: {book.IssuedCopies}, Available: {book.AvailableCopies}");
             }
 
-            ViewBag.IssuedBooksCount = books.Sum(b => b.IssuedCopies); // Count total issued books
+            ViewBag.IssuedBooksCount = books.Sum(b => b.IssuedCopies); 
             return View(books);
         }
 
@@ -55,7 +45,7 @@ namespace LMS_WEB_PORTAL.Controllers
                 ).ToList();
             }
 
-            return Json(books); // Return JSON response
+            return Json(books); 
         }
 
 
@@ -65,7 +55,7 @@ namespace LMS_WEB_PORTAL.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken] // Helps prevent CSRF attacks
+        [ValidateAntiForgeryToken] 
         public async Task<IActionResult> Create(Book book)
         {
             Console.WriteLine($"Received Data: Title={book.Title}, Author={book.Author}, ISBN={book.ISBN}");
@@ -74,7 +64,7 @@ namespace LMS_WEB_PORTAL.Controllers
 
             if (!ModelState.IsValid)
             {
-                // Log ModelState errors
+               
                 foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
                 {
                     Console.WriteLine($"ModelState Error: {error.ErrorMessage}");

@@ -8,7 +8,7 @@ using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient<IBookService, BookService>(client =>
 {
@@ -25,7 +25,7 @@ builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-// Middleware
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");

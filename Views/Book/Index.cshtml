@@ -6,18 +6,18 @@
 
 <h2>Books List</h2>
 
-<!-- Add New Book Button -->
+
 <a asp-action="Create" class="btn btn-primary mb-3">Add New Book</a>
 
-<!-- Search Box -->
+
 <input type="text" id="searchBox" class="form-control mb-3" placeholder="Search by Title, Author, or ISBN">
 
-<!-- Total Issued Books -->
+
 <div class="alert alert-info">
     <strong>Total Issued Books:</strong> <span id="issuedBooksCount">@ViewBag.IssuedBooksCount</span>
 </div>
 
-<!-- Books Table -->
+
 <table class="table table-striped">
     <thead>
         <tr>
@@ -39,7 +39,7 @@
                 <td>@book.ISBN</td>
                 <td>@book.TotalCopies</td>
                 <td>@book.IssuedCopies</td>
-                <td>@book.AvailableCopies</td> <!-- Show Available Copies -->
+                <td>@book.AvailableCopies</td> 
                 <td>
                     <a asp-action="Edit" asp-route-id="@book.Id" class="btn btn-sm btn-warning">Edit</a>
                     <a asp-action="Delete" asp-route-id="@book.Id" class="btn btn-sm btn-danger">Delete</a>
@@ -50,7 +50,6 @@
 </table>
 
 
-<!-- jQuery for Live Search -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
@@ -63,14 +62,14 @@
                 data: { searchTerm: searchTerm },
                 success: function (data) {
                     var tableBody = $("#bookTableBody");
-                    tableBody.empty(); // Clear existing rows
+                    tableBody.empty(); 
 
                     var issuedCount = 0;
 
                     $.each(data, function (index, book) {
                         var status = book.isIssued ? "Issued" : "Available";
                         if (book.isIssued) {
-                            issuedCount++; // Count issued books
+                            issuedCount++;
                         }
 
                         var row = `<tr>
@@ -86,7 +85,7 @@
                         tableBody.append(row);
                     });
 
-                    // Update issued books count dynamically
+            
                     $("#issuedBooksCount").text(issuedCount);
                 }
             });
